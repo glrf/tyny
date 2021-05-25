@@ -1,0 +1,5 @@
+---
+serve:
+  admin:
+    grpc:
+      addr: ":2344"

@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+option go_package = "github.com/glorfischi/tyny/api";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+
+package api;
+
+// The service to interact with the tyny server
+service tyny {
+  // Gets a redirect
+  rpc GetRedirect(GetRedirectRequest) returns (Redirect){
+    option (google.api.http) = {
+			get: "/redirects/{name}"
+		};
+  };
+  // Lists redirects
+  rpc ListRedirects(ListRedirectsRequest) returns (ListRedirectsResponse){
+    option (google.api.http) = {
+      get: "/redirects"
+    };
+  };
+  // Creates a redirect
+  rpc CreateRedirect(CreateRedirectRequest) returns (Redirect){
+    option (google.api.http) = {
+      post: "/redirects"
+      body: "redirect"
+    };
+  };
+  // Updates a redirect
+  rpc UpdateRedirect(UpdateRedirectRequest) returns (Redirect){
+    option (google.api.http) = {
+      patch: "/redirects/{redirect.name}"
+      body: "redirect"
+    };
+  };
+  // Deletes a redirect
+  rpc DeleteRedirect(DeleteRedirectRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+			delete: "/redirects/{name}"
+		};
+  };
+}
+
+message Redirect {
+  // Resource name of the redirect. Needs to be unique. 
+  // Directly implies the resulting shortened url
+  //
+  // Example: `bar` => `tyny.xyz/bar`
+  string name = 1 [(google.api.field_behavior) = IMMUTABLE];
+
+  // The target to redirect to
+  // Example: https://glorfischi.xyz
+  string target = 2;
+
+}
+
+message GetRedirectRequest {
+  // The field will contain name of the requested redirect
+  string name = 1;
+}
+
+message ListRedirectsRequest {
+  // The maximum number of items to return.
+  int32 page_size = 1;
+
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 2;
+}
+
+message ListRedirectsResponse {
+  // A list of redirect resources. There
+  // will be a maximum number of items returned based on the page_size field
+  // in the request.
+  repeated Redirect redirects = 1;
+
+  // Token to retrieve the next page of results, or empty if there are no
+  // more results in the list.
+  string next_page_token = 2;
+}
+
+message CreateRedirectRequest {
+  // The redirect to be created
+  Redirect redirect = 1;
+}
+
+message UpdateRedirectRequest {
+  // The redirect which replaces the resource on the server
+  Redirect redirect = 1;
+
+  // The update mask applies to the resource. For the `FieldMask` definition,
+  // see https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRedirectRequest {
+  // The resource name of the redirect to be deleted
+  string name = 1;
+}
+
+
+

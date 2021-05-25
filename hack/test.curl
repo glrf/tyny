@@ -1,0 +1,36 @@
+curl -s -X GET -G \
+  'localhost:8008/api/redirects' \
+  -d "page_token=" \
+  -d "page_size=0" \
+
+
+curl -s -X GET -G \
+  'localhost:8008/api/redirects/glrf.xyz' \
+
+
+
+curl -s -X POST \
+  'localhost:8008/api/redirects' \
+  -d '{
+    "name": "glrf",
+    "target": "https://glorfischi.xyz"
+  }';
+curl -s -X POST \
+  'localhost:8008/api/redirects' \
+  -d '{
+    "name": "nice",
+    "target": "https://glorfischi.xyz/aaaaaaaaaaaaa"
+  }';
+
+
+
+curl -s -X PATCH \
+  'localhost:8008/api/redirects/nicse' \
+  -d '{
+    "target": "https://glorfischi.xyz/nope"
+  }';
+
+
+
+
+
